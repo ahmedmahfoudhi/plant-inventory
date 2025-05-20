@@ -93,7 +93,7 @@ export function PlantInformationDialog({
 
   return (
     <AlertDialog open={dialogOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="overflow-y-auto max-h-lvh">
         <Form {...form}>
           <form
             onSubmit={handleSubmit(handleSubmitProcess)}
