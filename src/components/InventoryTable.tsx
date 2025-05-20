@@ -11,69 +11,17 @@ import {
 import { Input } from "./ui/input";
 
 import { useEffect, useState, useTransition } from "react";
-import { Button } from "./ui/button";
 
 import Combobox from "./ui/combobox";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AddPlantDialog } from "./AddPlantDialog";
-import { Plant, PlantResponse } from "@/types";
+import { PlantResponse } from "@/types";
 import EditPlantDialog from "./EditPlantDialog";
 import { DeletePlantDialog } from "./DeletePlantDialog";
 import useDebounce from "@/hooks/useDebounce";
 import { getPlants } from "@/actions/plant.actions";
 import { PlantCategories } from "@/constants/plantCategories";
-const plants = [
-  {
-    id: 1,
-    name: "Croton",
-    category: "Indoor",
-    price: "$250.00",
-    stock: 40,
-  },
-  {
-    id: 2,
-    name: "Snake Plant",
-    category: "Indoor",
-    price: "$150.00",
-    stock: 20,
-  },
-  {
-    id: 3,
-    name: "Aloe Vera",
-    category: "Indoor",
-    price: "$100.00",
-    stock: 30,
-  },
-  {
-    id: 4,
-    name: "Fiddle Leaf Fig",
-    category: "Indoor",
-    price: "$300.00",
-    stock: 10,
-  },
-  {
-    id: 5,
-    name: "Spider Plant",
-    category: "Indoor",
-    price: "$80.00",
-    stock: 25,
-  },
-  {
-    id: 6,
-    name: "Peace Lily",
-    category: "Indoor",
-    price: "$120.00",
-    stock: 15,
-  },
-  {
-    id: 7,
-    name: "Pothos",
-    category: "Indoor",
-    price: "$90.00",
-    stock: 35,
-  },
-];
 
 interface InventoryTableProps {
   plants: PlantResponse[];
@@ -125,7 +73,7 @@ function InventoryTable({ plants }: InventoryTableProps) {
         <TableCaption>A list of your plants.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead className="max-md:hidden">ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Price</TableHead>
@@ -133,28 +81,40 @@ function InventoryTable({ plants }: InventoryTableProps) {
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {currentPlants.map((plant) => (
-            <TableRow
-              key={plant.id}
-              onClick={() => router.push(`/plants/${plant.id}`)}
-              className="cursor-pointer"
-            >
-              <TableCell>{plant.id}</TableCell>
-              <TableCell>{plant.name}</TableCell>
-              <TableCell>{plant.category}</TableCell>
-              <TableCell>{plant.price}</TableCell>
-              <TableCell>{plant.stock}</TableCell>
-              <TableCell
-                onClick={(e) => e.stopPropagation()}
-                className="flex gap-2 justify-center"
-              >
-                <EditPlantDialog plant={plant} />
-                <DeletePlantDialog plantId={plant.id} />
+        {isPendingSearch ? (
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={6}>
+                <div className="flex justify-center">
+                  <Loader2 className="animate-spin text-center" />
+                </div>
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
+          </TableBody>
+        ) : (
+          <TableBody>
+            {currentPlants.map((plant) => (
+              <TableRow
+                key={plant.id}
+                onClick={() => router.push(`/plants/${plant.id}`)}
+                className="cursor-pointer"
+              >
+                <TableCell className="max-md:hidden">{plant.id}</TableCell>
+                <TableCell>{plant.name}</TableCell>
+                <TableCell>{plant.category}</TableCell>
+                <TableCell>{plant.price}</TableCell>
+                <TableCell>{plant.stock}</TableCell>
+                <TableCell
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex gap-2 justify-center"
+                >
+                  <EditPlantDialog plant={plant} />
+                  <DeletePlantDialog plantId={plant.id} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
     </>
   );

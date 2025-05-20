@@ -1,7 +1,6 @@
 import { getPlants } from "@/actions/plant.actions";
 import InventoryTable from "@/components/InventoryTable";
 import { stackServerApp } from "@/stack";
-import { PlantResponse } from "@/types";
 import { SignUp } from "@stackframe/stack";
 
 async function PlantsPage() {
