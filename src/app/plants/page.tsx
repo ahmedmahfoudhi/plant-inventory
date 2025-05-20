@@ -6,12 +6,15 @@ import { SignUp } from "@stackframe/stack";
 
 async function PlantsPage() {
   const user = await stackServerApp.getUser();
+  if (!user) {
+    return (
+      <div className="flex justify-center h-full w-full items-center">
+        <SignUp />
+      </div>
+    );
+  }
   const plants = (await getPlants()).plants;
 
-  if (!user) {
-    return <SignUp />;
-  }
-  // const app = stackServerApp.urls;
   return <InventoryTable plants={plants as PlantResponse[]} />;
 }
 

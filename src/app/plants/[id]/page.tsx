@@ -5,6 +5,8 @@ import React from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { getUTImageUrl } from "@/lib/utils";
+import { stackServerApp } from "@/stack";
+import { SignIn } from "@stackframe/stack";
 
 export async function generateMetadata({
   params,
@@ -20,6 +22,14 @@ export async function generateMetadata({
 }
 
 async function PlantPage({ params }: { params: Promise<{ id: string }> }) {
+  const user = await stackServerApp.getUser();
+  if (!user) {
+    return (
+      <div className="flex justify-center h-full w-full items-center">
+        <SignIn />
+      </div>
+    );
+  }
   const { id } = await params;
   const plant = await getPlantById(id);
   if (!plant) {
