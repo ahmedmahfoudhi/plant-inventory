@@ -30,14 +30,14 @@ interface InventoryTableProps {
 function InventoryTable({ plants }: InventoryTableProps) {
   const [currentPlants, setCurrentPlants] = useState(plants);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isPendingSearch, startSearchPlants] = useTransition();
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     startSearchPlants(async () => {
       const plants = (await getPlants(searchTerm, selectedCategory)).plants;
-      setCurrentPlants(plants);
+      setCurrentPlants(plants as PlantResponse[]);
     });
   }, [debouncedSearchTerm, selectedCategory]);
 

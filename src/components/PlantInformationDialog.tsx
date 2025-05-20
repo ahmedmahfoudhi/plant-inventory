@@ -80,7 +80,7 @@ export function PlantInformationDialog({
     }
   };
 
-  const handleCancel = async (e) => {
+  const handleCancel = async (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     const formImage = form.getValues("image");
