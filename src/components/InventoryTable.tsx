@@ -21,7 +21,7 @@ import EditPlantDialog from "./EditPlantDialog";
 import { DeletePlantDialog } from "./DeletePlantDialog";
 import useDebounce from "@/hooks/useDebounce";
 import { getPlants } from "@/actions/plant.actions";
-import { PlantCategories } from "@/constants/plantCategories";
+import { ALL_CATEGORIES, PlantCategories } from "@/constants/plantCategories";
 
 interface InventoryTableProps {
   plants: PlantResponse[];
@@ -33,6 +33,11 @@ function InventoryTable({ plants }: InventoryTableProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isPendingSearch, startSearchPlants] = useTransition();
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const fetchPlants = async () => {
+    const { plants } = await getPlants(searchTerm, selectedCategory);
+    setCurrentPlants(plants as PlantResponse[]);
+  };
 
   useEffect(() => {
     startSearchPlants(async () => {
@@ -62,11 +67,11 @@ function InventoryTable({ plants }: InventoryTableProps) {
               setValue={setSelectedCategory}
               dropdownMenu={[
                 ...PlantCategories,
-                { value: "all", label: "All" },
+                { value: ALL_CATEGORIES, label: "All" },
               ]}
             />
           </div>
-          <AddPlantDialog />
+          <AddPlantDialog onSuccess={fetchPlants} />
         </div>
       </div>
       <Table>
@@ -108,8 +113,11 @@ function InventoryTable({ plants }: InventoryTableProps) {
                   onClick={(e) => e.stopPropagation()}
                   className="flex gap-2 justify-center"
                 >
-                  <EditPlantDialog plant={plant} />
-                  <DeletePlantDialog plantId={plant.id} />
+                  <EditPlantDialog plant={plant} onSuccess={fetchPlants} />
+                  <DeletePlantDialog
+                    plantId={plant.id}
+                    onSuccess={fetchPlants}
+                  />
                 </TableCell>
               </TableRow>
             ))}

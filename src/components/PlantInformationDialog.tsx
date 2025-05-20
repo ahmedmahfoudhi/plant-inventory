@@ -37,12 +37,14 @@ import { Textarea } from "./ui/textarea";
 import { addPlantSchema, Plant } from "@/types";
 import UploadImage from "./UploadImage";
 import { deletePlantImage } from "@/actions/file.actions";
+import type { MouseEvent } from "react";
 
 export interface PlantInformationDialogProps {
   onSubmit: (plant: Plant) => Promise<boolean>;
   plant?: Plant;
   setDialogOpen: (v: boolean) => void;
   dialogOpen: boolean;
+  onSuccess?: () => Promise<void>;
 }
 
 export function PlantInformationDialog({
@@ -50,8 +52,8 @@ export function PlantInformationDialog({
   plant,
   setDialogOpen,
   dialogOpen,
+  onSuccess,
 }: PlantInformationDialogProps) {
-  console.log(plant);
   const form = useForm<Plant>({
     resolver: zodResolver(addPlantSchema),
     defaultValues: {
@@ -77,10 +79,13 @@ export function PlantInformationDialog({
     setSubmissionLoading(false);
     if (isUpdateSuccess) {
       setDialogOpen(false);
+      if (onSuccess) {
+        await onSuccess();
+      }
     }
   };
 
-  const handleCancel = async (e: MouseEvent) => {
+  const handleCancel = async (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     const formImage = form.getValues("image");

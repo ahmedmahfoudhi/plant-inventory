@@ -4,6 +4,7 @@ import { getCurrentUserId } from "./user.actions";
 import { Plant } from "@/types";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { ALL_CATEGORIES } from "@/constants/plantCategories";
 
 
 export async function getPlants(searchTerm?: string, category?: string | null) {
@@ -19,7 +20,7 @@ export async function getPlants(searchTerm?: string, category?: string | null) {
                 mode: "insensitive"
             }
         }
-        if (category && category !== "all") {
+        if (category && category !== ALL_CATEGORIES) {
             whereClause.category = {
                 contains: category,
                 mode: "insensitive"
@@ -72,6 +73,7 @@ export async function deletePlant(id: string) {
     }
     try {
         const result = await prisma.plant.delete({ where: { id } });
+        revalidatePath("/plants");
         return { success: true, message: `Plant ${result.name} was deleted successfully.` };
     } catch (error) {
         console.log(error);

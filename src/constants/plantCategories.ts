@@ -9,4 +9,6 @@ export const PlantCategories = [
     { value: "Shrub", label: "Shrub" },
 ]
 
+export const ALL_CATEGORIES = "ALL";
+
 export const PlantCategoriesValues = PlantCategories.map(category => category.value);

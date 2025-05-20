@@ -13,11 +13,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
-export function DeletePlantDialog({ plantId }: { plantId: string }) {
+export function DeletePlantDialog({
+  plantId,
+  onSuccess,
+}: {
+  plantId: string;
+  onSuccess?: () => Promise<void>;
+}) {
   const handleDelete = async () => {
     try {
       await deletePlant(plantId);
       toast.success(`Plant deleted successfully`);
+      if (onSuccess) {
+        await onSuccess();
+      }
     } catch (error) {
       toast.error((error as unknown as { message: string }).message);
     }

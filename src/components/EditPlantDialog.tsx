@@ -6,7 +6,13 @@ import { Edit } from "lucide-react";
 import { updatePlant } from "@/actions/plant.actions";
 import { toast } from "sonner";
 import { deletePlantImage } from "@/actions/file.actions";
-function EditPlantDialog({ plant }: { plant: PlantResponse }) {
+function EditPlantDialog({
+  plant,
+  onSuccess,
+}: {
+  plant: PlantResponse;
+  onSuccess?: () => Promise<void>;
+}) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const handleSubmit = async (data: Plant) => {
     const oldImageKey = plant.image || "";
@@ -40,6 +46,7 @@ function EditPlantDialog({ plant }: { plant: PlantResponse }) {
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         plant={plant as Plant}
+        onSuccess={onSuccess}
       />
     </>
   );

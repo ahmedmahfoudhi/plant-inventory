@@ -10,7 +10,11 @@ import { addPlant } from "@/actions/plant.actions";
 import { toast } from "sonner";
 import { PlantInformationDialog } from "./PlantInformationDialog";
 
-export function AddPlantDialog() {
+export function AddPlantDialog({
+  onSuccess,
+}: {
+  onSuccess?: () => Promise<void>;
+}) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const onSubmit = async (data: Plant) => {
@@ -41,6 +45,7 @@ export function AddPlantDialog() {
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         onSubmit={onSubmit}
+        onSuccess={onSuccess}
       />
     </>
   );
