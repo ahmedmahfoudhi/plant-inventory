@@ -84,16 +84,14 @@ Access the deployed app on Vercel: [https://plant-inventory-seven.vercel.app/](h
 
    * Copy `.env.example` to `.env.local` and set:
 
-     ```bash
+    ```bash
     NEXT_PUBLIC_STACK_PROJECT_ID=''
     NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=''
     STACK_SECRET_SERVER_KEY=''
-
-
     DATABASE_URL=''
     UPLOADTHING_TOKEN=''
     NEXT_PUBLIC_UPLOADTHING_APP_ID=''
-     ```
+    ```
 
 4. **Run database migrations**
 
